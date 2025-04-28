@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Drama</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Agenda de Drama</h1>
+        <div class="form-container">
+            <h2>Agendar Nuevo Drama</h2>
+            <label for="nombre">Tu Nombre:</label>
+            <input type="text" id="nombre" placeholder="Tu nombre">
+
+            <label for="motivo">Motivo del Drama:</label>
+            <input type="text" id="motivo" placeholder="¿Qué pasó?">
+
+            <label for="fecha">Fecha y Hora (aproximada):</label>
+            <input type="datetime-local" id="fecha">
+
+            <button id="agendarBtn">Agendar Drama</button>
+        </div>
+
+        <div class="lista-container">
+            <h2>Próximos Dramas</h2>
+            <ul id="listaDramas">
+                </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyADlEUh5mcbi7b-i0c2-rAQN4luousIhro",
+            authDomain: "agenda-drama-nuevo-addc2.firebaseapp.com",
+            projectId: "agenda-drama-nuevo-addc2",
+            storageBucket: "agenda-drama-nuevo-addc2.firebasestorage.app",
+            messagingSenderId: "463759048769",
+            appId: "1:463759048769:web:7a43ff04d3a89811e246c0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        // Export app for use in script.js
+        window.firebaseApp = app;
+    </script>
+
+    <script src="script.js" type="module"></script>
+</body>
+</html>
