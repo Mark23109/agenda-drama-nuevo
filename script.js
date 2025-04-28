@@ -14,34 +14,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const db = getFirestore(app);
     const dramasCollection = collection(db, 'dramas');
 
-    const renderizarDramas = (dramasData) => {
-        console.log("Datos recibidos en renderizarDramas:", dramasData);
-        listaDramas.innerHTML = '';
-        dramasData.forEach(doc => {
-            console.log("Elemento 'doc' en renderizarDramas:", doc);
-            if (doc && doc.id && doc.data) {
-                const drama = doc.data();
-                const fechaFirestore = drama.fecha;
-                const fechaLocal = fechaFirestore ? fechaFirestore.toDate().toLocaleString() : 'Fecha no disponible';
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <span><strong>${drama.nombre}:</strong> ${drama.motivo} (${fechaLocal})</span>
-                    <button class="eliminar-btn" data-id="${doc.id}">Eliminar</button>
-                `;
-                listaDramas.appendChild(listItem);
-            } else {
-                console.error("Error: Elemento 'doc' inválido en renderizarDramas:", doc);
-            }
-        });
+const renderizarDramas = (dramasData) => {
+    console.log("Datos recibidos en renderizarDramas:", dramasData);
+    listaDramas.innerHTML = '';
+    dramasData.forEach(documento => { // Cambiamos 'doc' a 'documento' para mayor claridad
+        console.log("Elemento 'documento' en renderizarDramas:", documento);
+        if (documento && documento.id && documento.data) {
+            const drama = documento.data();
+            const fechaFirestore = drama.fecha;
+            const fechaLocal = fechaFirestore ? fechaFirestore.toDate().toLocaleString() : 'Fecha no disponible';
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <span><strong>${drama.nombre}:</strong> ${drama.motivo} (${fechaLocal})</span>
+                <button class="eliminar-btn" data-id="${documento.id}">Eliminar</button>
+            `;
+            listaDramas.appendChild(listItem);
+        } else {
+            console.error("Error: Elemento 'documento' inválido en renderizarDramas:", documento);
+        }
+    });
 
-        const botonesEliminar = document.querySelectorAll('.eliminar-btn');
-        botonesEliminar.forEach(boton => {
-            boton.addEventListener('click', function() {
-                const idDramaAEliminar = this.dataset.id;
-                eliminarDrama(idDramaAEliminar);
-            });
+    const botonesEliminar = document.querySelectorAll('.eliminar-btn');
+    botonesEliminar.forEach(boton => {
+        boton.addEventListener('click', function() {
+            const idDramaAEliminar = this.dataset.id;
+            eliminarDrama(idDramaAEliminar);
         });
-    };
+    });
+};
 
     const obtenerDramas = () => {
         const q = query(dramasCollection, orderBy('fecha'));
