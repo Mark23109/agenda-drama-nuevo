@@ -17,20 +17,19 @@ document.addEventListener('DOMContentLoaded', () => {
 const renderizarDramas = (dramasData) => {
     console.log("Datos recibidos en renderizarDramas:", dramasData);
     listaDramas.innerHTML = '';
-    dramasData.forEach(documento => { // Cambiamos 'doc' a 'documento' para mayor claridad
-        console.log("Elemento 'documento' en renderizarDramas:", documento);
-        if (documento && documento.id && documento.data) {
-            const drama = documento.data();
+    dramasData.forEach(drama => { // Iteramos directamente sobre el array de objetos drama
+        console.log("Elemento 'drama' en renderizarDramas:", drama);
+        if (drama && drama.id && drama.nombre && drama.motivo && drama.fecha) {
             const fechaFirestore = drama.fecha;
-            const fechaLocal = fechaFirestore ? fechaFirestore.toDate().toLocaleString() : 'Fecha no disponible';
+            const fechaLocal = fechaFirestore ? new Date(fechaFirestore.seconds * 1000 + fechaFirestore.nanoseconds / 1000000).toLocaleString() : 'Fecha no disponible';
             const listItem = document.createElement('li');
             listItem.innerHTML = `
                 <span><strong>${drama.nombre}:</strong> ${drama.motivo} (${fechaLocal})</span>
-                <button class="eliminar-btn" data-id="${documento.id}">Eliminar</button>
+                <button class="eliminar-btn" data-id="${drama.id}">Eliminar</button>
             `;
             listaDramas.appendChild(listItem);
         } else {
-            console.error("Error: Elemento 'documento' inválido en renderizarDramas:", documento);
+            console.error("Error: Elemento 'drama' inválido en renderizarDramas:", drama);
         }
     });
 
