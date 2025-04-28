@@ -15,12 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const dramasCollection = collection(db, 'dramas');
 
     const renderizarDramas = (dramasData) => {
+        console.log("Datos recibidos en renderizarDramas:", dramasData);
         listaDramas.innerHTML = '';
         dramasData.forEach(doc => {
+            console.log("Elemento 'doc' en renderizarDramas:", doc);
             if (doc && doc.id && doc.data) {
                 const drama = doc.data();
                 const fechaFirestore = drama.fecha;
-                const fechaLocal = fechaFirestore ? fechaFirestore.toDate().toLocaleString() : 'Fecha no disponible'; // Convertir Timestamp a Date
+                const fechaLocal = fechaFirestore ? fechaFirestore.toDate().toLocaleString() : 'Fecha no disponible';
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `
                     <span><strong>${drama.nombre}:</strong> ${drama.motivo} (${fechaLocal})</span>
@@ -48,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             querySnapshot.forEach((doc) => {
                 dramasFirestore.push({ id: doc.id, ...doc.data() });
             });
+            console.log("Dramas Firestore (obtenerDramas):", dramasFirestore);
             renderizarDramas(dramasFirestore);
         });
     };
@@ -61,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addDoc(dramasCollection, {
                 nombre,
                 motivo,
-                fecha: Timestamp.fromDate(new Date(fecha)) // Guardar como Timestamp
+                fecha: Timestamp.fromDate(new Date(fecha))
             })
             .then(() => {
                 console.log("Drama agendado con éxito!");
@@ -94,10 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
     obtenerDramas();
 
     onSnapshot(query(dramasCollection, orderBy('fecha')), (snapshot) => {
+        console.log("Snapshot recibido:", snapshot);
         const dramasFirestore = [];
-        snapshot.forEach((doc) => { // Usamos forEach() aquí
+        snapshot.forEach((doc) => {
+            console.log("Documento en snapshot:", doc);
             dramasFirestore.push({ id: doc.id, ...doc.data() });
         });
+        console.log("Dramas Firestore (onSnapshot) antes de renderizar:", dramasFirestore);
         renderizarDramas(dramasFirestore.sort((a, b) => new Date(a.fecha) - new Date(b.fecha)));
     });
 });
