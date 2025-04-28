@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderizarDramas = (dramasData) => {
         listaDramas.innerHTML = '';
         dramasData.forEach(doc => {
-            if (doc && typeof doc.data === 'function') {
+            if (doc && doc.id && doc.data) {
                 const drama = doc.data();
                 const fechaFirestore = drama.fecha;
                 const fechaLocal = fechaFirestore ? fechaFirestore.toDate().toLocaleString() : 'Fecha no disponible'; // Convertir Timestamp a Date
@@ -95,10 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     onSnapshot(query(dramasCollection, orderBy('fecha')), (snapshot) => {
         const dramasFirestore = [];
-        snapshot.docChanges().forEach((change) => {
-            if (change.type === "added" || change.type === "modified" || change.type === "removed") {
-                dramasFirestore.push({ id: change.doc.id, ...change.doc.data() });
-            }
+        snapshot.forEach((doc) => { // Usamos forEach() aquí
+            dramasFirestore.push({ id: doc.id, ...doc.data() });
         });
         renderizarDramas(dramasFirestore.sort((a, b) => new Date(a.fecha) - new Date(b.fecha)));
     });
